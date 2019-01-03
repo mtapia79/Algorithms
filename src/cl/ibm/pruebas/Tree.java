@@ -1,5 +1,8 @@
 package cl.ibm.pruebas;
 
+import java.util.LinkedList;
+import java.util.Queue;
+
 public class Tree {
 	public static void main(String args[]){
 		Arbol arbol = new Arbol();
@@ -46,8 +49,23 @@ public class Tree {
 		arbol.preOrden(arbol.raiz);
 		System.out.println("postorden");
 		arbol.postOrden(arbol.raiz);*/
-		System.out.println("anchura");
+		
+		
+		/*System.out.println("anchura");
 		arbol.anchura(arbol.raiz);
+		System.out.println("profundidad");
+		arbol.profundidad(arbol.raiz);*/
+		
+		/*NodoArbol lca = arbol.lca(nuevo1, nuevo4, nuevo8);
+		System.out.println("LCA:" + lca.getDato());*/
+		
+		/*int sizeBT = arbol.sizeBT(nuevo1);
+		System.out.println("SIZE of BT:" + sizeBT);*/
+		
+		/*int heigthBT = arbol.heigthBT(nuevo1);
+        System.out.println("Heigth of BT:" + heigthBT);*/
+		
+		arbol.BFSByLevel(nuevo1);
 	}
 }
 
@@ -136,13 +154,73 @@ class Arbol{
 	
 	public void profundidad(NodoArbol nodo){
 		if(nodo != null){
-			return;
-		}
+		
 		
 		System.out.println(nodo.getDato());
 		profundidad(nodo.getIzquierdo());
 		profundidad(nodo.getDerecho());
 		
+        }
+	}
+	
+	public NodoArbol lca(NodoArbol root , NodoArbol n1 , NodoArbol n2) {
+	    if(root == null) { return null;}
+	    
+	    if(root == n1 || root == n2) { return root;}
+	    
+	    NodoArbol left = lca(root.getIzquierdo(),n1,n2);
+	    NodoArbol rigth = lca(root.getDerecho(),n1,n2);
+        
+	    if(left != null && rigth != null) { return root;}
+	    
+	    if(left == null && rigth == null) { return null;}
+	    
+	    if(left != null) {
+	        return left;
+	    }else {
+	        return rigth;
+	    }
+	    
+	}
+	
+	public int sizeBT(NodoArbol root) {
+	    if(root == null) {
+	        return 0;
+	    }
+	    
+	    int l = sizeBT(root.getIzquierdo());
+	    int r = sizeBT(root.getDerecho());
+        
+	    return l + r +1;
+	}
+	
+	public int heigthBT(NodoArbol root) {
+        if(root == null) {
+            return 0;
+        }
+        
+        int l = heigthBT(root.getIzquierdo());
+        int r = heigthBT(root.getDerecho());
+        
+        return 1 + Math.max(l, r);
+    }
+	
+	public void BFSByLevel(NodoArbol root) {
+	   Queue<NodoArbol> q = new LinkedList<NodoArbol>();
+	   q.add(root);
+	   
+	   while(!q.isEmpty()) {
+	       NodoArbol nodo = q.poll();
+	       System.out.println(nodo.getDato());
+	       
+	       if(nodo.getIzquierdo() != null) {
+	           q.add(nodo.getIzquierdo());
+	       }
+	       
+	       if(nodo.getDerecho() != null) {
+	           q.add(nodo.getDerecho());
+	       }
+	   }
 	}
 		
 }
@@ -156,6 +234,9 @@ class NodoArbol{
 		this.izquierdo = null;
 		this.derecho = null;
 	}
+	public NodoArbol(int dato) {
+        this.dato = dato;
+    }
 	
 	public NodoArbol getIzquierdo(){
 		return izquierdo;
